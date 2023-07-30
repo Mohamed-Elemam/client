@@ -60,7 +60,13 @@ export default function RecommendedForYou() {
           my={2}
         >
           {apiData?.length ? (
-            <Grid container spacing={2}>
+            <Grid
+              container
+              spacing={2}
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: "smooth" })
+              }}
+            >
               <Products apiData={apiData.slice("", 4)} />
             </Grid>
           ) : (

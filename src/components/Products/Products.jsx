@@ -1,6 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react"; 
-// import { useCart } from './../../CustomHooks/useCart';
+import React, { useState } from "react";
 import {
   Typography,
   Card,
@@ -17,43 +16,41 @@ import { Toaster, toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../Redux/cartSlice.js";
 
+
 // eslint-disable-next-line react/prop-types
 export default function Products({ apiData }) {
-  
-
   const dispatch = useDispatch();
-    
- 
-  
-  
+
   const navigate = useNavigate();
-   const addToast=()=> toast.success('Item add to cart 🎉')
+  const addToast = () => toast.success("Item add to cart 🎉");
   // eslint-disable-next-line react/prop-types
-  return   <>{ apiData?.map((ele, index) => (
+  return (
+    <>
+     {/* eslint-disable-next-line react/prop-types */}
+      {apiData?.map((ele, index) => (
         <Grid key={index} item md={3} sm={6}>
-         
-            <Card
-              sx={{
-                border: "1px solid #999",
-                boxShadow: "none",
-                flexGrow: "1 !important",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                height: "100%",
-                ":hover": {
-                  border: "1.5px #2453d3 solid",
-                  cursor: "pointer",
-                },
-              }}
-            >
-               <Link
-            underline="none"
-            color={"inherit"}
-            onClick={() => {
-              navigate(`/product/${ele.id}`);
+          <Card
+            sx={{
+              border: "1px solid #999",
+              boxShadow: "none",
+              flexGrow: "1 !important",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              height: "100%",
+              ":hover": {
+                border: "1.5px #2453d3 solid",
+                cursor: "pointer",
+              },
             }}
           >
+            <Link
+              underline="none"
+              color={"inherit"}
+              onClick={() => {
+                navigate(`/product/${ele.id}`);
+              }}
+            >
               <CardMedia
                 component="img"
                 sx={{
@@ -88,28 +85,25 @@ export default function Products({ apiData }) {
                   {ele.attributes.price} EGP
                 </Typography>
               </CardContent>
-                </Link>
-              <CardActions disableSpacing>
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  // onClick={handleAddToCart}
-                  onClick={() =>{
-                    dispatch(addToCart( ele))
-                     addToast()
-                    }}
-                >
-                  Add To Cart
-                  <ShoppingCartOutlinedIcon fontSize="medium" sx={{ ml: 2 }} />
-                </Button>
-              </CardActions>
-            </Card>
-
+            </Link>
+            <CardActions disableSpacing>
+              <Button
+                variant="outlined"
+                fullWidth
+                // onClick={handleAddToCart}
+                onClick={() => {
+                  dispatch(addToCart(ele));
+                  addToast();
+                }}
+              >
+                Add To Cart
+                <ShoppingCartOutlinedIcon fontSize="medium" sx={{ ml: 2 }} />
+              </Button>
+            </CardActions>
+          </Card>
         </Grid>
-        
       ))}
-            <Toaster position="top-center" reverseOrder={false} />
-
-      </>
-      
+      <Toaster position="top-center" reverseOrder={false} />
+    </>
+  );
 }

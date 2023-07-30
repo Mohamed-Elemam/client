@@ -5,11 +5,12 @@ import { Stack, Typography, Container, Box, Grid } from "@mui/material";
 import Products from "./Products.jsx";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { motion } from "framer-motion";
+
 export default function FeaturedProducts() {
   const [apiData, setApiData] = useState([]);
-
 
   const [alignment, setAlignment] = React.useState("Show All");
 
@@ -18,13 +19,13 @@ export default function FeaturedProducts() {
       setAlignment(newAlignment);
     }
   };
-  
-const AllProduct= "/api/products?populate=*"
-const monitor= "/api/products?populate=*&filters[category][$eq]=monitor"
-const laptop= "/api/products?populate=*&filters[category][$eq]=laptop"
-const camera= "/api/products?populate=*&filters[category][$eq]=camera"
 
-async function getAllProducts(link) {
+  const AllProduct = "/api/products?populate=*";
+  const monitor = "/api/products?populate=*&filters[category][$eq]=monitor";
+  const laptop = "/api/products?populate=*&filters[category][$eq]=laptop";
+  const camera = "/api/products?populate=*&filters[category][$eq]=camera";
+
+  async function getAllProducts(link) {
     try {
       const { data } = await axios.get(
         import.meta.env.VITE_PRODUCTS_API_LINK + link
@@ -39,15 +40,11 @@ async function getAllProducts(link) {
     getAllProducts(AllProduct);
   }, [AllProduct]);
   const categories = [
-    { title: "Show All" , param:AllProduct},
-    { title: "Monitor" ,param:monitor },
-    { title: "Laptop", param:laptop },
-    { title: "Camera", param:camera },
+    { title: "Show All", param: AllProduct },
+    { title: "Monitor", param: monitor },
+    { title: "Laptop", param: laptop },
+    { title: "Camera", param: camera },
   ];
- 
-
-
-
 
   return (
     <>
@@ -63,8 +60,6 @@ async function getAllProducts(link) {
             </Grid>
 
             <Grid item md={4} xs={12}>
-             
-
               <ToggleButtonGroup
                 value={alignment}
                 exclusive
@@ -73,15 +68,15 @@ async function getAllProducts(link) {
                 aria-label="text alignment"
               >
                 {categories.map((ele, index) => (
-  <ToggleButton key={index} value={ele.title} onClick={() => getAllProducts(ele.param)}>
-    {ele.title}
-  </ToggleButton>
-))}
-
+                  <ToggleButton
+                    key={index}
+                    value={ele.title}
+                    onClick={() => getAllProducts(ele.param)}
+                  >
+                    {ele.title}
+                  </ToggleButton>
+                ))}
               </ToggleButtonGroup>
-
-
-
             </Grid>
           </Grid>
         </Stack>
@@ -95,9 +90,17 @@ async function getAllProducts(link) {
           gap={2}
           my={2}
         >
-          {/* *************************************** */}
+
           {apiData?.length ? (
-            <Grid container spacing={2}>
+
+            <Grid component={motion.section}
+            layout
+            initial={{ transform: "scale(0)" }}
+            animate={{ transform: "scale(1)" }}
+            exit={{ transform: "scale(0)" }}
+            transition={{duration:.5,type:'spring',stiffness: 90}}
+            container spacing={2} 
+            >
               <Products apiData={apiData.slice("", 8)} />
             </Grid>
           ) : (

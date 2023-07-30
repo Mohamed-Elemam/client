@@ -19,11 +19,11 @@ export default function Home() {
 </Helmet>
 
        <Slider/>
-    <Hero/>
-    <FeaturedProducts/>
-    <DroneCamera/>
-    <FeaturedCategories/>
-  <PlaystaionAd/>
+     <Hero/>
+     <FeaturedProducts/>
+     <DroneCamera/>
+     <FeaturedCategories/>
+   <PlaystaionAd/>
 <MayLike/>
 
     <Compaines/>

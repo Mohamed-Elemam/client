@@ -10,6 +10,9 @@ import { Helmet } from "react-helmet";
 import RecommendedForYou from "../RecommendedForYou.jsx";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../Redux/cartSlice.js";
+import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css'
+import InnerImageZoom from 'react-inner-image-zoom'
+
 
 export default function ProductDetails() {
   const [product, setProduct] = useState(null);
@@ -23,14 +26,13 @@ export default function ProductDetails() {
   async function getProductData(id) {
     try {
       const { data } = await axios.get(
-        import.meta.env.VITE_PRODUCTS_API_LINK +
-          `/api/products/${id}?populate=*`
+        import.meta.env.VITE_PRODUCTS_API_LINK+`/api/products/${id}?populate=*`
       );
 
       setProduct(data.data);
     } catch (error) {
-      // console.log(error.response.statusText);
-      setApiError(error.response.statusText);
+      // console.log(error.response.data.error.message);
+      setApiError(error.response.data.error.message);
     }
   }
   const handleImageClick = (index) => {
@@ -82,11 +84,9 @@ export default function ProductDetails() {
               </Stack>
             </Grid>
             <Grid item md={4} xs={12}>
-              <img
-                src={`${product?.attributes?.images?.data[showImage]?.attributes.url}`}
-                width={"100%"}
-                alt="product image"
-              />
+             
+<InnerImageZoom src={`${product?.attributes?.images?.data[showImage]?.attributes.url}`} />
+
             </Grid>
             <Grid item md={6} xs={12}>
               <Stack justifyContent={"center"} height={"100%"}>
