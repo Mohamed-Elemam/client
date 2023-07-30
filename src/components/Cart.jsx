@@ -42,7 +42,7 @@ const navigate = useNavigate()
           <Typography variant="h3" color="initial">
             Cart  
           </Typography>
-          <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
+          <Stack display={'flex'} justifyContent={'space-around'} alignItems={'center'} flexDirection={'row'}>
           <Typography variant="h5" my={3} textAlign={'center'}> Cart total price is {totalAmount} egp</Typography>
           <Button variant="contained" > procced to checkout</Button>
           </Stack >
