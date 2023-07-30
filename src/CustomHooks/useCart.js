@@ -8,7 +8,7 @@ export const useCart = () => {
 
   // Function to add a product to the cart
   const addToCart = (product) => {
-    const existingCartItem = cartItems.find((item) => item.id === product.id);
+    const existingCartItem = cartItems.find((item) => item.name === product.name);
 
     if (existingCartItem) {
       setCartItems(

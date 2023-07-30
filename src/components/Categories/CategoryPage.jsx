@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Container, Grid, Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
+import { Helmet } from "react-helmet";
 
 export default function CategoryPage() {
   const { name } = useParams();
@@ -29,6 +30,11 @@ export default function CategoryPage() {
   }, [lowCaseName]);
   return (
     <Container>
+      <Helmet>
+    <title>{name} category</title>
+</Helmet>
+
+
       {apiData?.length ? (
         <Grid container spacing={2} my={5}>
           <Products apiData={apiData} />

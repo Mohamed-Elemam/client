@@ -6,14 +6,17 @@ import FeaturedProducts from './Products/FeaturedProducts';
 import FeaturedCategories from './Categories/FeaturedCategories.jsx';
 import Compaines from './Compaines';
 import DroneCamera from './Posts/DroneCamera.jsx';
-// import Newsetler from './Newsetler';
 import PlaystaionAd from './Posts/PlaystaionAd.jsx';
 import BackTop from './utils/BackTop.jsx';
+import { Helmet } from 'react-helmet';
+import MayLike from './MayLike.jsx';
 
 export default function Home() {
   return (
     <>
-      
+      <Helmet>
+    <title>TechMart</title>
+</Helmet>
 
        <Slider/>
     <Hero/>
@@ -21,8 +24,9 @@ export default function Home() {
     <DroneCamera/>
     <FeaturedCategories/>
   <PlaystaionAd/>
+<MayLike/>
+
     <Compaines/>
-    {/* <Newsetler/>  */}
 <BackTop />
     </>
   )

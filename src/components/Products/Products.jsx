@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react"; 
-import { useCart } from './../../CustomHooks/useCart';
+// import { useCart } from './../../CustomHooks/useCart';
 import {
   Typography,
   Card,
@@ -13,30 +13,23 @@ import {
 } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { useNavigate } from "react-router-dom";
+import { Toaster, toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../Redux/cartSlice.js";
 
+// eslint-disable-next-line react/prop-types
 export default function Products({ apiData }) {
-  // const [cartItems, setCartItems] = useState([]); 
-
-  // const addToCart = (product) => {
-  //   const existingCartItem = cartItems.find((item) => item.id === product.id);
-
-  //   if (existingCartItem) {
-  //     setCartItems(
-  //       cartItems.map((item) =>
-  //         item.id === product.id ? { ...item, count: item.count + 1 } : item
-  //       )
-  //     );
-  //   } else {
-  //     setCartItems([...cartItems, { ...product, count: 1 }]);
-  //   }
-  // };
   
-  // console.log(cartItems)
-  const { addToCart ,cartItems} = useCart(); 
-console.log(cartItems)
-  const navigate = useNavigate();
 
-  return apiData?.map((ele, index) => (
+  const dispatch = useDispatch();
+    
+ 
+  
+  
+  const navigate = useNavigate();
+   const addToast=()=> toast.success('Item add to cart 🎉')
+  // eslint-disable-next-line react/prop-types
+  return   <>{ apiData?.map((ele, index) => (
         <Grid key={index} item md={3} sm={6}>
          
             <Card
@@ -100,14 +93,23 @@ console.log(cartItems)
                 <Button
                   variant="outlined"
                   fullWidth
-                  onClick={() => addToCart(ele)}
+                  // onClick={handleAddToCart}
+                  onClick={() =>{
+                    dispatch(addToCart( ele))
+                     addToast()
+                    }}
                 >
                   Add To Cart
                   <ShoppingCartOutlinedIcon fontSize="medium" sx={{ ml: 2 }} />
                 </Button>
               </CardActions>
             </Card>
+
         </Grid>
-      ))
-  
+        
+      ))}
+            <Toaster position="top-center" reverseOrder={false} />
+
+      </>
+      
 }

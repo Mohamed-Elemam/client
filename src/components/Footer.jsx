@@ -1,3 +1,5 @@
+
+// eslint-disable-next-line no-unused-vars
 import React from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -14,10 +16,18 @@ const Footer = () => {
   const socialMedia = ["Facebook", "Twitter", "Instagram", "Pinterest"];
 
   return (
-    <Box
-      sx={{ py: 3, backgroundColor: "#f0f0f0" }}
+    <>
+     <Box
+      component="footer"
+      sx={{
+        py: 3,
+        backgroundColor: "#f0f0",
+        marginTop: "auto", // Use marginTop: "auto" to push the footer to the bottom
+      }}
     >
-      <Box display="flex" flexDirection={{ xs: "column", md: "row" }}>
+      <Container maxWidth="lg">
+        <Box display="flex" flexDirection={{ xs: "column", md: "row" }}>
+          <Box display="flex" flexDirection={{ xs: "column", md: "row" }}>
         {/* First column */}
         <Box
           sx={{
@@ -98,7 +108,10 @@ const Footer = () => {
             </Box>
           </Box>
       </Box>
-    </Box>
+          </Box>
+        </Container>
+      </Box>
+    </>
   );
 };
 

@@ -19,6 +19,7 @@ import {
   Typography,
   Container,
 } from "@mui/material";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -71,16 +72,15 @@ export default function Register() {
         import.meta.env.VITE_REGISTERATION_API_LINK+"auth/signup",
         values
       );
-      console.log(data);
-      console.log(data.token)
+      
       localStorage.setItem('userToken',data.token)
       setLoading(false);
-      // console.log(values);
-      
       navigate('/');
+      toast.success('Signup success')
     } catch (error) {
       console.log(error);
       setLoading(false);
+      toast.error(error.response.data.message)
       setApiError(error.response.data.message);
     }
   }
@@ -88,6 +88,11 @@ export default function Register() {
  
   return (
     <Container>
+      
+<Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
     <Helmet>
     <title>Sign UP</title>
 </Helmet>

@@ -18,6 +18,7 @@ import { Helmet } from "react-helmet";
 
 import { useFormik } from "formik";
 import axios from "axios";
+import { Toaster, toast } from "react-hot-toast";
 
 function Copyright(props) {
   return (
@@ -71,8 +72,8 @@ export default function LogIn() {
         import.meta.env.VITE_REGISTERATION_API_LINK + "auth/signin",
         values
       );
-      console.log(data);
-      console.log(data.token);
+
+      toast.success("Login success");
       localStorage.setItem("userToken", data.token);
       setLoading(false);
 
@@ -81,6 +82,7 @@ export default function LogIn() {
     } catch (error) {
       console.log(error);
       setLoading(false);
+      toast.error(apiError);
       setApiError(error.response.data.message);
     }
   }
@@ -91,6 +93,8 @@ export default function LogIn() {
         <Helmet>
           <title>Log IN</title>
         </Helmet>
+
+        <Toaster position="top-center" reverseOrder={false} />
         <CssBaseline />
         <Box
           sx={{
@@ -186,7 +190,9 @@ export default function LogIn() {
             )}
           </Box>
           <Box>
-            <Link href="/signup" variant="body2">{"don't  have an account? Sign Up"}</Link>
+            <Link href="/signup" variant="body2">
+              {"don't  have an account? Sign Up"}
+            </Link>
           </Box>
         </Box>
         <Copyright sx={{ mt: 2, mb: 4 }} />

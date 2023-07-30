@@ -12,24 +12,144 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
-import { useCart } from "../CustomHooks/useCart.js";
-import { useEffect } from "react";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import MoreIcon from "@mui/icons-material/MoreVert";
 
-export const userToken = localStorage.getItem("userToken");
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import { useSelector } from 'react-redux';
+
+ const userToken = localStorage.getItem("userToken");
 const user = userToken ? jwtDecode(userToken) : null;
 
 export default function Navbar() {
+
+  const cart = useSelector((state) => state.cart)
+
+  const getTotalQuantity = () => {
+    let total = 0
+    cart.forEach(item => {
+      total += item.quantity
+    })
+    return total
+  }
+  
+
+
   const navigate = useNavigate();
-  const {cartItems} = useCart()
-  const totalCount = cartItems.reduce((total, item) => total + item.count, 0);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   
-console.log(totalCount)
-useEffect(() => {
-  
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
 
- 
-}, [totalCount])
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleMobileMenuOpen = (event) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const menuId = "primary-search-account-menu";
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+    </Menu>
+  );
+
+  const mobileMenuId = "primary-search-account-menu-mobile";
+  const renderMobileMenu = (
+    <Menu
+    
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      {userToken ? (
+        <MenuItem>
+          <p>{user?.name}</p>
+          <AccountCircle sx={{ marginLeft: "8px" }} />
+        </MenuItem>
+      ) : (
+        <MenuItem
+          onClick={() => {
+            navigate("/login");
+          }}
+        >
+          <Typography variant="h6" mx={2}>
+            login
+          </Typography>
+          <PersonOutlineOutlinedIcon />
+        </MenuItem>
+      )}
+
+      <MenuItem
+        onClick={() => {
+          navigate("/cart");
+        }}
+      >
+        <Typography variant="h6" mx={2}>
+            Cart
+          </Typography>
+        <Badge
+         badgeContent={getTotalQuantity() || 0}
+          color="primary">
+          <ShoppingCartOutlinedIcon />
+        </Badge>
+      </MenuItem>
+
+      {localStorage.getItem("userToken") ? (
+        <MenuItem
+          onClick={() => {
+            localStorage.removeItem("userToken");
+            navigate("/");
+            window.location.reload();
+          }}
+        >
+          <Typography variant="h6" mx={2}>
+            Logout
+          </Typography>
+            <LogoutOutlinedIcon  />
+         
+        </MenuItem>
+      ) : (
+        ""
+      )}
+    </Menu>
+  );
 
   return (
     <Box sx={{ flexGrow: 1, marginBottom: "95px" }}>
@@ -42,16 +162,6 @@ useEffect(() => {
         }}
       >
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            {/* <MenuIcon /> */}
-          </IconButton>
-          {/* <Box component={'span'}> */}
 
           <Link
             color="inherit"
@@ -70,56 +180,87 @@ useEffect(() => {
               Techmart
             </Typography>
           </Link>
-          {userToken ? (
-            <Box aria-label="account" color="inherit" display={"flex"}>
-              <Typography variant="" mx={1}>
-                {user?.name}
-              </Typography>
-              <PersonOutlineOutlinedIcon sx={{}} />
-            </Box>
-          ) : (
-            <IconButton
-              aria-label="account"
-              color="inherit"
-              onClick={() => {
-                navigate("/login");
-              }}
-            >
-              <Typography variant="h6" mx={2}>
-                login
-              </Typography>
-              <PersonOutlineOutlinedIcon sx={{}} />
-            </IconButton>
-          )}
 
-          <IconButton aria-label="shopping-cart" color="inherit">
-            <Badge badgeContent={totalCount} color="primary">
-              <ShoppingCartOutlinedIcon />
-            </Badge>
-          </IconButton>
-          <IconButton aria-label="favorite-products" color="inherit">
-            {/* <Badge badgeContent={9} color="primary">
-              <FavoriteBorderOutlinedIcon />
-            </Badge> */}
-          </IconButton>
-          {localStorage.getItem("userToken") ? (
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            {userToken ? (
+              <Box
+                aria-label="account"
+                color="inherit"
+                display="flex"
+                alignItems="center"
+              >
+                <p>{user?.name}</p>
+                <AccountCircle sx={{ marginLeft: "8px" }} />
+              </Box>
+            ) : (
+              <IconButton
+                aria-label="account"
+                color="inherit"
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                <Typography variant="h6" mx={2}>
+                  login
+                </Typography>
+                <PersonOutlineOutlinedIcon sx={{}} />
+              </IconButton>
+            )}
+
             <IconButton
-              aria-label="logout"
+              aria-label="shopping-cart"
               color="inherit"
-              mx={1}
               onClick={() => {
-                localStorage.removeItem("userToken");
-                navigate("/");
-                window.location.reload();
+                navigate("/cart");
               }}
             >
-              <LogoutOutlinedIcon />
+              <Badge 
+              badgeContent={getTotalQuantity() || 0}
+               color="primary">
+                <ShoppingCartOutlinedIcon />
+              </Badge>
             </IconButton>
-          ) : (
-            ""
-          )}
+
+            {/* <IconButton aria-label="favorite-products" color="inherit">
+            <Badge badgeContent={9} color="primary">
+              <FavoriteBorderOutlinedIcon />
+            </Badge>
+          </IconButton> */}
+
+            {localStorage.getItem("userToken") ? (
+              <IconButton
+                aria-label="logout"
+                color="inherit"
+                mx={1}
+                onClick={() => {
+                  localStorage.removeItem("userToken");
+                  navigate("/");
+                  window.location.reload();
+                }}
+              >
+                <LogoutOutlinedIcon />
+              </IconButton>
+            ) : (
+              ""
+            )}
+          </Box>
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
+      {renderMobileMenu}
+      {renderMenu}
     </Box>
   );
 }

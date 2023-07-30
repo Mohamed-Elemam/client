@@ -1,32 +1,34 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-import { Stack, Typography, Container, Box, Button, Grid } from "@mui/material";
+import { Stack, Typography, Container, Box, Grid } from "@mui/material";
 
 import Products from "./Products.jsx";
-// import { Link } from "react-router-dom";
 import axios from "axios";
-// import ToggleButton from "@mui/material/ToggleButton";
-// import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 export default function FeaturedProducts() {
-  // const [alignment, setAlignment] = React.useState("Show All");
-
-  // const handleAlignment = (event, newAlignment) => {
-  //   if (newAlignment !== null) {
-  //     setAlignment(newAlignment);
-  //   }
-  //   console.log(newAlignment);
-  // };
-
   const [apiData, setApiData] = useState([]);
 
-  async function getAllProducts() {
+
+  const [alignment, setAlignment] = React.useState("Show All");
+
+  const handleAlignment = (event, newAlignment) => {
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
+  };
+  
+const AllProduct= "/api/products?populate=*"
+const monitor= "/api/products?populate=*&filters[category][$eq]=monitor"
+const laptop= "/api/products?populate=*&filters[category][$eq]=laptop"
+const camera= "/api/products?populate=*&filters[category][$eq]=camera"
+
+async function getAllProducts(link) {
     try {
       const { data } = await axios.get(
-        import.meta.env.VITE_PRODUCTS_API_LINK + "/api/products?populate=*"
+        import.meta.env.VITE_PRODUCTS_API_LINK + link
       );
-      // console.log(data.data);
       setApiData(data.data);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -34,14 +36,18 @@ export default function FeaturedProducts() {
   }
 
   useEffect(() => {
-    getAllProducts();
-  }, []);
+    getAllProducts(AllProduct);
+  }, [AllProduct]);
   const categories = [
-    { title: "Show All" },
-    { title: "Monitor" },
-    { title: "Laptop" },
-    { title: "Camera" },
+    { title: "Show All" , param:AllProduct},
+    { title: "Monitor" ,param:monitor },
+    { title: "Laptop", param:laptop },
+    { title: "Camera", param:camera },
   ];
+ 
+
+
+
 
   return (
     <>
@@ -57,27 +63,25 @@ export default function FeaturedProducts() {
             </Grid>
 
             <Grid item md={4} xs={12}>
-              {categories.map((ele, index) => (
-                <Box component={"span"} key={index}>
-                  <Button variant="text" color="primary">
-                    {ele.title}
-                  </Button>
-                </Box>
-              ))}
-              {/* <ToggleButtonGroup
+             
+
+              <ToggleButtonGroup
                 value={alignment}
                 exclusive
+                color="primary"
                 onChange={handleAlignment}
                 aria-label="text alignment"
               >
                 {categories.map((ele, index) => (
-                  <Box component={"span"} key={index}>
-                    <ToggleButton value={ele.title} aria-label={ele.title}>
-                      {ele.title}
-                    </ToggleButton>
-                  </Box>
-                ))}
-              </ToggleButtonGroup> */}
+  <ToggleButton key={index} value={ele.title} onClick={() => getAllProducts(ele.param)}>
+    {ele.title}
+  </ToggleButton>
+))}
+
+              </ToggleButtonGroup>
+
+
+
             </Grid>
           </Grid>
         </Stack>
